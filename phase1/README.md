@@ -172,6 +172,23 @@ The final leaderboard follows the same metric types of the local evaluation prog
 Specifically, the local evaluation program provides one public reference temporal attack for robustness evaluation. The final leaderboard evaluates robustness under **three hidden temporal attacks**.
 
 
+### Score
+
+The Phase 1 leaderboard score is a weighted combination of **invisibility**, **effectiveness**, and **robustness**. The final leaderboard computes this score using hidden prompts, frame sampling strategy, scoring models, encoders, and temporal attacks.
+
+```text
+score = (0.5 * invisibility + 4 * HarmonicMean(effectiveness + robustness_attack1 + robustness_attack2 + robustness_attack3)) / 4.5
+```
+
+* **Invisibility** is computed from the `invisibility` metric on the protected videos. Since all submissions must already satisfy the per-pixel perturbation budget, invisibility is assigned a lower weight.
+* **Effectiveness** is computed from `face_detection`, `face_similarity`, `prompt_following`, and `image_quality` on generated videos from the protected clip.
+* **Robustness** is computed by first applying a temporal attack to the protected video clip, then sampling a frame from the attacked clip for I2V generation, and computing `face_detection`, `face_similarity`, `prompt_following`, and `image_quality` on the generated video. The final leaderboard uses **three hidden temporal attacks**.
+* Each effectiveness or robustness component combines different metric types by first scaling them to the same 0–100 range and then averaging them with equal weight.
+* The effectiveness and the three robustness scores are combined using a harmonic mean, encouraging protection that does not fail significantly under any evaluated threat setting.
+
+The local evaluation program reports reference metric values only. These values are provided to help participants estimate method performance locally, but they do not reproduce the final leaderboard score.
+
+
 ## Submission
 
 Build the archive from your protected output:
