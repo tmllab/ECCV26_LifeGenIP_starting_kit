@@ -61,8 +61,6 @@ There you can register and join this competition, make your submissions, and tra
 
 ## License
 
-Code in this repository is released under [Apache License 2.0](LICENSE).
-
 This competition uses [MEAD dataset](https://wywu.github.io/projects/MEAD/MEAD.html) with the authors' permission. By downloading the data you agree to the MEAD [Terms of Use](https://github.com/uniBruce/Mead/blob/master/Terms%20of%20Use_%20Mead.pdf). Any report or publication that uses this data **should cite** the MEAD paper: 
 
 ```bibtex
@@ -72,6 +70,19 @@ This competition uses [MEAD dataset](https://wywu.github.io/projects/MEAD/MEAD.h
   booktitle = {ECCV},
   month     = {August},
   year      = {2020}
+}
+```
+
+Code in this repository is released under [Apache License 2.0](LICENSE).
+
+The motivation, problem formulation, analysis of video-specific temporal challenges, and unified evaluation suite that form the basis of this competition are presented in the following paper. If you use the competition benchmark, evaluation suite, or starting kit in your research, please consider citing it:
+
+```bibtex
+@article{huang2026delving,
+  title={Delving into the Temporal Challenges of Unified Video Protection Against Image-to-Video and Fine-Tuning-based Customization},
+  author={Yuxin Huang and Ziming Hong and Mingming Gong and Wanyu Wang and Jing Zhang and Tongliang Liu},
+  year={2026},
+  journal={arXiv preprint arXiv:2607.13336}
 }
 ```
 
