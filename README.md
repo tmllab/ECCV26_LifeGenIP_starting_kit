@@ -35,8 +35,8 @@ Two attack pathways:
 
 ### Phases
 
-- **Phase 1 — Preliminary** (open to all teams). Tests the reference-based (I2V) threat. Scored on **Effectiveness** and **Robustness**. Top teams advance to Phase 2.  👉 For details on environment setup, model, data download, hardware requirements, running example, evaluation, and submission, see: **[`phase1/README.md`](phase1/README.md).**
-- **Phase 2 — Final** (top teams from Phase 1). Tests both reference-based (I2V) and tuning-based threats. Scored on all three tracks. Starting kit will be released later.
+- **Phase 1 — Preliminary** (open to all teams). Tests the reference-based (I2V) threat. Scored on **Effectiveness** and **Robustness**. Top 10 teams advance to Phase 2.  👉 For details on environment setup, model, data download, hardware requirements, running example, evaluation, and submission, see: **[`phase1/README.md`](phase1/README.md).**
+- **Phase 2 — Final** (top 10 teams from Phase 1). Tests both reference-based (I2V) and tuning-based threats. Scored on all three tracks. 👉 Detailed instructions, including environment setup, model and data downloads, hardware requirements, example usage, evaluation, and submission, are provided in **[`phase2/README.md`](phase2/README.md).**
 
 Important dates and deadlines: please see the [codabench timeline page](https://www.codabench.org/competitions/16817/). 
 
