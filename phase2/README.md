@@ -173,14 +173,57 @@ For I2V evaluation, the evaluation program samples a frame from protected video 
 | `image_quality` | Effectiveness + Robustness + Transferability | Generated videos                   | Visual quality of the generated video                                  | Lower quality means better protection, indicating lower visual quality in the generated video.   |
 | `invisibility`  | Invisibility only          | Protected video | Imperceptibility of the protected video compared to the original     | Better invisibility means better imperceptibility. Computed once on the protected video, not on generated videos.   |
 
-> ⚠️ Local metric values are for reference only and may not match the final leaderboard results.
-
 Note that the `invisibility` metric is computed directly between the **protected video** clip and the **original video** clip, while all other metrics are computed based on the **generated videos**.
 
-The final leaderboard follows the same metric types of the local evaluation program, but uses hidden text prompts, a hidden reference-frame sampling strategy, hidden face detectors and encoders (for `face_detection` and `face_similarity`), hidden vision-language models (for `prompt_following`), hidden image-quality models, and hidden temporal attacks. 
+⚠️ The local evaluation program reports reference metric values only. These values are provided to help participants estimate method performance locally, but they **do not reproduce the final leaderboard score**.
 
-Specifically, the local evaluation program provides one public reference temporal attack for robustness evaluation. The final leaderboard evaluates robustness under **three hidden temporal attacks**.
+The final leaderboard follows the same metric types of the local evaluation program, but uses hidden text prompts, a hidden reference-frame sampling strategy (for reference-based setting), hidden face detectors and encoders (for `face_detection` and `face_similarity`), hidden vision-language models (for `prompt_following`), and hidden image-quality models. 
 
+### Scoring
+
+The Phase 2 leaderboard score is a weighted combination of **invisibility**, **effectiveness**, **robustness**, and **transferability**. The final leaderboard computes this score using hidden reference-based and tuning-based models, prompts, scoring models, encoders, and temporal attacks.
+
+The final score is computed as:
+```text
+score = (
+    0.5 * invisibility
+    + 5 * HarmonicMean(
+        effectiveness_ref,
+        robustness_ref_attack1,
+        robustness_ref_attack2,
+        transferability_ref_model1,
+        transferability_ref_model2,
+        effectiveness_tune,
+        robustness_tune_attack1,
+        robustness_tune_attack2,
+        transferability_tune_model1,
+        transferability_tune_model2
+    )
+) / 5.5
+```
+
+* **Invisibility** is computed from the `invisibility` metric on the protected videos. Since all submissions must already satisfy the per-pixel perturbation budget, invisibility is assigned a lower weight.
+* **Effectiveness**, **Robustness** and **Transferability** are evaluated in both the **reference-based** and **tuning-based customization** settings.
+    * **Effectiveness** is computed from `face_detection`, `face_similarity`, `prompt_following`, and `image_quality` on generated videos from the known evaluation model **Wan2.2-TI2V-5B** under both the *reference-based* and *tuning-based* customization settings.
+    * **Robustness** is evaluated only on **Wan2.2-TI2V-5B** under both customization settings
+        * In the *reference-based* setting, temporal attack is first applied to the protected video clips, after which a frame is sampled from the attacked clips and used for I2V generation. 
+        * In the *tuning-based* setting, the attacked clips is used for model tuning.
+    
+        The generated videos are then evaluated using `face_detection`, `face_similarity`, `prompt_following`, and `image_quality`.
+    * **Transferability** is computed from `face_detection`, `face_similarity`, `prompt_following`, and `image_quality` on generated videos from **hidden evaluation model** under both the *reference-based* and *tuning-based* customization settings.
+* Each effectiveness, robustness, or transferability component combines different metric types by first scaling them to the same 0–100 range and then averaging them with equal weight.
+* The effectiveness, robustness, and transferability scores from both the *reference-based* and *tuning-based* settings are combined using a harmonic mean. This encourages protection methods not to fail significantly under any evaluated threat setting.
+
+In summary, the full scoring items and scale are listed as follows:
+
+| Evaluation Dimension | Evaluation Scope | Reference-Based Customization | Tuning-Based Customization |
+|---|---|---|---|
+| **Invisibility** | 1 shared evaluation on the protected videos | — | — |
+| **Effectiveness** | Known evaluation model | 1 evaluation on Wan2.2-TI2V-5B | 1 evaluation on Wan2.2-TI2V-5B |
+| **Transferability** | Hidden evaluation models | 2 evaluations on hidden reference-based models | 2 evaluations on hidden tuning-based models |
+| **Robustness** | Hidden temporal attacks | 2 evaluations on Wan2.2-TI2V-5B | 2 evaluations on Wan2.2-TI2V-5B |
+
+> ⚠️ Each submission is expected to require approximately `6 hours` of wall-clock time for evaluation before the results are returned.
 
 ## Submission
 
