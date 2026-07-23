@@ -177,7 +177,7 @@ Specifically, the local evaluation program provides one public reference tempora
 The Phase 1 leaderboard score is a weighted combination of **invisibility**, **effectiveness**, and **robustness**. The final leaderboard computes this score using hidden prompts, frame sampling strategy, scoring models, encoders, and temporal attacks.
 
 ```text
-score = (0.5 * invisibility + 4 * HarmonicMean(effectiveness + robustness_attack1 + robustness_attack2 + robustness_attack3)) / 4.5
+score = (0.5 * invisibility + 4 * HarmonicMean(effectiveness, robustness_attack1, robustness_attack2, robustness_attack3)) / 4.5
 ```
 
 * **Invisibility** is computed from the `invisibility` metric on the protected videos. Since all submissions must already satisfy the per-pixel perturbation budget, invisibility is assigned a lower weight.
